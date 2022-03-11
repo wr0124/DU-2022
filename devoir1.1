@@ -1,4 +1,56 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-data =pd.read_csv('age_gender.csv',sep=";")
+import seaborn as sns
+import numpy as np
+
+
+##sep is the delimiter to use. 
+#ref: https://thispointer.com/pandas-read-csv-file-to-dataframe-with-custom-delimiter-in-python/#:~:text=pandas.-,read_csv(filepath_or_buffer%2C%20sep%3D'%2C%20'%2C%20delimiter%3D,separator%20while%20parsing%20a%20file.
+data=pd.read_csv('age_gender.csv',sep=";")
 print(data.shape)
+print( data.head())
+print( data.columns )
+print(data.dtypes )
+print(data.info() )
+
+########matplotlib hist
+plt.hist(data.age)
+plt.xlabel('Age')
+plt.ylabel('Age Distribution')
+plt.show()
+
+print( str(data['genre'].astype(bool).sum() ) + 'are males' ) 
+ 
+
+plt.hist(data.genre)
+plt.xlabel('Genre')
+plt.ylabel('Genre Distribution')
+
+# Pie chart, where the slices will be ordered and plotted counter-clockwise:
+labels = 'Femelle', 'Male'
+sizes = [len( data['genre'].astype(bool) )-data['genre'].astype(bool).sum(), data['genre'].astype(bool).sum() ]
+explode = (0, 0.1)  # only "explode" the 2nd slice (i.e. 'Male')
+
+fig1, ax1 = plt.subplots()
+ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+        shadow=True, startangle=90)
+ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+plt.show()
+
+########matplotlib boxplot
+data.boxplot([ 'age'  ],sym='+',notch=1,vert=False,labels=['age'])
+plt.show()
+
+
+data.boxplot(column=['genre'] )
+plt.show()
+
+sns.boxplot(x='genre',y='age',data=data )
+labels=['femelle','male']
+plt.show()
+
+
+########matplotlib barplot
+sns.barplot(x='genre',y='age',estimator=np.median,data=data,order=[0,1],capsize=.2 )
+plt.show()
